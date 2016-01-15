@@ -2,7 +2,7 @@ package genetic.robot;
 
 public class RobotController {
 
-    public static int MAX_GENERATIONS = 1000;
+    public static int MAX_GENERATIONS = 10000;
 
     public static void main(String[] args) {
 
@@ -28,7 +28,7 @@ public class RobotController {
                 { 1, 3, 3, 3, 3, 1, 1, 1, 4 }
         });
 
-        GeneticAlgorithm ga = new GeneticAlgorithm(200, 0.05, 0.9, 2, 10);
+        GeneticAlgorithm ga = new GeneticAlgorithm(200, 0.3, 0.9, 5, 30);
         Population population = ga.initPopulation(128);
 
         ga.evalPopulation(population, maze);
@@ -36,11 +36,13 @@ public class RobotController {
         int generation = 1;
 
         while (!ga.isTerminationConditionMet(generation, MAX_GENERATIONS)){
-            //TODO print fittest individual
+            Individual fittest = population.getFittest(0);
+            System.out.println("Generation " + generation + "best solution: " + fittest.getFitness() +
+                    " - " + fittest);
 
-            //TODO Apply crossover
+            population = ga.crossoverPopulation(population);
 
-            //TODO apply mutation
+            population = ga.mutatePopulation(population);
 
             ga.evalPopulation(population, maze);
 
@@ -48,7 +50,9 @@ public class RobotController {
 
         }
 
-        //TODO print results;
+        System.out.println("Stopper after " + (generation - 1) + " generations");
+        Individual fittest = population.getFittest(0);
+        System.out.println("Best solution is " + fittest.getFitness() + " - " + fittest);
 
     }
 
